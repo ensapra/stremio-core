@@ -57,7 +57,8 @@ pub enum Sort {
     #[derivative(Default)]
     LastWatched,
     Name,
-    TimesWatched,
+    Watched,
+    NotWatched,
 }
 
 #[derive(Clone, PartialEq, Eq, Serialize, Deserialize, Debug)]
@@ -318,7 +319,8 @@ fn catalog_update<F: LibraryFilter>(
             })
             .sorted_by(|a, b| match &selected.request.sort {
                 Sort::LastWatched => b.state.last_watched.cmp(&a.state.last_watched),
-                Sort::TimesWatched => b.state.times_watched.cmp(&a.state.times_watched),
+                Sort::Watched => b.state.times_watched.cmp(&a.state.times_watched),
+                Sort::NotWatched => a.state.times_watched.cmp(&b.state.times_watched),
                 Sort::Name => a.name.to_lowercase().cmp(&b.name.to_lowercase()),
             })
             .skip((selected.request.page.get() - 1) * CATALOG_PAGE_SIZE)

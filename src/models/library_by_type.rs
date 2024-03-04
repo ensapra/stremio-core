@@ -185,7 +185,8 @@ fn catalogs_update<F: LibraryFilter>(
                     .into_iter()
                     .sorted_by(|a, b| match &selected.sort {
                         Sort::LastWatched => b.state.last_watched.cmp(&a.state.last_watched),
-                        Sort::TimesWatched => b.state.times_watched.cmp(&a.state.times_watched),
+                        Sort::Watched => b.state.times_watched.cmp(&a.state.times_watched),
+                        Sort::NotWatched => a.state.times_watched.cmp(&b.state.times_watched),
                         Sort::Name => a.name.to_lowercase().cmp(&b.name.to_lowercase()),
                     })
                     .take(take)
@@ -215,7 +216,8 @@ fn next_page<F: LibraryFilter>(
             .filter(|library_item| library_item.r#type == *r#type)
             .sorted_by(|a, b| match &selected.sort {
                 Sort::LastWatched => b.state.last_watched.cmp(&a.state.last_watched),
-                Sort::TimesWatched => b.state.times_watched.cmp(&a.state.times_watched),
+                Sort::Watched => b.state.times_watched.cmp(&a.state.times_watched),
+                Sort::NotWatched => a.state.times_watched.cmp(&b.state.times_watched),
                 Sort::Name => a.name.to_lowercase().cmp(&b.name.to_lowercase()),
             })
             .skip(skip)
